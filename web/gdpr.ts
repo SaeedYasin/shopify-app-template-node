@@ -1,6 +1,7 @@
 import { DeliveryMethod } from "@shopify/shopify-api";
+import { WebhookHandlersParam } from "@shopify/shopify-app-express";
 
-export default {
+const GDPRWebhookHandlers: WebhookHandlersParam = {
   /**
    * Customers can request their data from a store owner. When this happens,
    * Shopify invokes this webhook.
@@ -10,7 +11,7 @@ export default {
   CUSTOMERS_DATA_REQUEST: {
     deliveryMethod: DeliveryMethod.Http,
     callbackUrl: "/api/webhooks",
-    callback: async (topic, shop, body, webhookId) => {
+    callback: async (topic: any, shop: any, body: any, webhookId: any) => {
       const payload = JSON.parse(body);
       // Payload has the following shape:
       // {
@@ -42,7 +43,7 @@ export default {
   CUSTOMERS_REDACT: {
     deliveryMethod: DeliveryMethod.Http,
     callbackUrl: "/api/webhooks",
-    callback: async (topic, shop, body, webhookId) => {
+    callback: async (topic: any, shop: any, body: any, webhookId: any) => {
       const payload = JSON.parse(body);
       // Payload has the following shape:
       // {
@@ -71,7 +72,7 @@ export default {
   SHOP_REDACT: {
     deliveryMethod: DeliveryMethod.Http,
     callbackUrl: "/api/webhooks",
-    callback: async (topic, shop, body, webhookId) => {
+    callback: async (topic: any, shop: any, body: any, webhookId: any) => {
       const payload = JSON.parse(body);
       // Payload has the following shape:
       // {
@@ -81,3 +82,5 @@ export default {
     },
   },
 };
+
+export default GDPRWebhookHandlers;

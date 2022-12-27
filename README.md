@@ -1,4 +1,24 @@
-# Shopify App Template - Node
+# Shopify App Template - Node with Typescript
+
+This is a template for building a [Shopify app] using Node and React with Typescript.
+
+## What are the differences from [original](https://github.com/Shopify/shopify-app-template-node)?
+
+- Almost all js files converted to ts
+- Add some packages
+  - Eslint
+  - Prettier
+  - Types for existing packages
+- Update run script(especially for backend)
+- Define original types(There are still a few any types left)
+
+**Please feel free to contribute if you find some issues.**
+
+# Credits
+
+Thanks to [tomotomy](https://github.com/tomotomy/shopify-app-template-node-typescript) and [KaiSpencer](https://github.com/KaiSpencer/shopify-app-template-node-ts) and [Michael Gibbons](https://github.com/Michael-Gibbons/OSB) shopify app starter template for many of the ideas and code samples used in this template.
+
+# Shopify App Template - Node（Original）
 
 This is a template for building a [Shopify app](https://shopify.dev/apps/getting-started) using Node and React. It contains the basics for building a Shopify app.
 
@@ -214,11 +234,11 @@ Below you would replace `randomly-generated-hostname` with what you have copied 
 
 ```shell
 # Using yarn
-yarn dev --tunnel-url https://randomly-generated-hostname.trycloudflare.com:3000
+yarn dev --tunnel-url "https://randomly-generated-hostname.trycloudflare.com:3000"
 # or using npm
-npm run dev --tunnel-url https://randomly-generated-hostname.trycloudflare.com:3000
+npm run dev --tunnel-url "https://randomly-generated-hostname.trycloudflare.com:3000"
 # or using pnpm
-pnpm dev --tunnel-url https://randomly-generated-hostname.trycloudflare.com:3000
+pnpm dev --tunnel-url "https://randomly-generated-hostname.trycloudflare.com:3000"
 ```
 
 ## Developer resources

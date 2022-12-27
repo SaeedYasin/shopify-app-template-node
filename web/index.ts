@@ -8,7 +8,10 @@ import shopify from "./shopify.js";
 import productCreator from "./product-creator.js";
 import GDPRWebhookHandlers from "./gdpr.js";
 
-const PORT = parseInt(process.env.BACKEND_PORT || process.env.PORT, 10);
+const PORT = parseInt(
+  process.env.BACKEND_PORT || process.env.PORT || "8081",
+  10
+);
 
 const STATIC_PATH =
   process.env.NODE_ENV === "production"
@@ -47,7 +50,7 @@ app.get("/api/products/create", async (_req, res) => {
 
   try {
     await productCreator(res.locals.shopify.session);
-  } catch (e) {
+  } catch (e: any) {
     console.log(`Failed to process products/create: ${e.message}`);
     status = 500;
     error = e.message;

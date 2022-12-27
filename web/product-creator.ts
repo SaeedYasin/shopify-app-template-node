@@ -81,7 +81,7 @@ const CREATE_PRODUCTS_MUTATION = `
 `;
 
 export default async function productCreator(
-  session,
+  session: any,
   count = DEFAULT_PRODUCTS_COUNT
 ) {
   const client = new shopify.api.clients.Graphql({ session });
@@ -100,7 +100,7 @@ export default async function productCreator(
         },
       });
     }
-  } catch (error) {
+  } catch (error: any) {
     if (error instanceof GraphqlQueryError) {
       throw new Error(
         `${error.message}\n${JSON.stringify(error.response, null, 2)}`
