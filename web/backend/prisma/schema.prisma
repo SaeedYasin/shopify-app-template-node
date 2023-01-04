@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Shop {
+  shop           String        @id @unique
+  scopes         String?
+  isInstalled    Boolean
+  subscription   Subscription?
+  shopData       ShopData?
+  installedAt    DateTime      @default(now())
+  uninstalledAt  DateTime?
+  installCount   Int           @default(0)
+  subscribeCount Int           @default(0)
+  showOnboarding Boolean       @default(true)
+  test           Boolean       @default(false)
+
+  @@index([shop])
+}
+
+enum Plan {
+  TRIAL
+  PAID
+}
+
+model Subscription {
+  shop             String    @id @unique
+  Shop             Shop      @relation(fields: [shop], references: [shop], onDelete: Cascade)
+  plan             Plan      @default(TRIAL)
+  active           Boolean   @default(true)
+  test             Boolean   @default(false)
+  trialDays        Int       @default(14)
+  currentPeriodEnd DateTime?
+  createdAt        DateTime  @default(now())
+  upgradedAt       DateTime?
+  chargeId         String?
+
+  @@index([shop])
+}
+
+model ShopData {
+  shop           String @id @unique
+  Shop           Shop   @relation(fields: [shop], references: [shop], onDelete: Cascade)
+  id             String @unique
+  name           String
+  ianaTimezone   String
+  email          String
+  url            String
+  currencyCode   String
+  primaryDomain  Json
+  plan           Json
+  billingAddress Json
+
+  @@index([shop])
+}
+
+model Session {
+  id      String @id @unique
+  shop    String
+  session String @db.Text
+
+  @@index([id])
+}

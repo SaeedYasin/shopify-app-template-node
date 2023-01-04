@@ -4,19 +4,59 @@ This is a template for building a [Shopify app] using Node and React with Typesc
 
 ## What are the differences from [original](https://github.com/Shopify/shopify-app-template-node)?
 
-- Almost all js files converted to ts
+- All important js files converted to ts
 - Add some packages
   - Eslint
   - Prettier
   - Types for existing packages
-- Update run script(especially for backend)
-- Define original types(There are still a few any types left)
+  - Prisma for easy database management
+- Define original types (There are still a few any types left)
+- Add example app code with billing
 
 **Please feel free to contribute if you find some issues.**
+
+## Quickstart
+
+1. Clone the repo
+
+```sh
+npx degit SaeedYasin/shopify-app-template-node shopify-app-ts && npx degit SaeedYasin/shopify-frontend-template-react shopify-app-ts/web/frontend
+```
+
+2. Go to your app's directory and install packages
+
+```sh
+cd shopify-app-ts && pnpm i
+```
+
+3. Go to `shopify-app-ts/web` folder and rename `.env.example` to `.env` and fill the value for `DATABASE_URL` etc
+
+4. On shopify partner's dashboard, select your app and then go to "App setup". In the "Protected customer data access" section click "request Access" and then fill out all information, give reasons for all fields like name/email/phone/address. If your app doesn't need this info then you can edit this info in `shopify-app-ts\web\middleware\shopData.ts`.
+
+5. Go to your app's directory and then run the app
+
+```sh
+cd shopify-app-ts && pnpm dev
+```
+
+- Install and start using the app by opening provided URL in your browser: _https://some-ngrok-subdomain-xxxx.ngrok.io?shop=your-shop-name.myshopify.com&host=YourHostValue_
+
+# Important Links
+
+- Shopify-api v6 changes: _https://github.com/Shopify/shopify-api-js/blob/main/docs/migrating-to-v6.md#changes-to-api-clients_
+- Shopify-api v6 getting started _https://github.com/Shopify/shopify-api-js/blob/main/README.md#configurations_
+- Shopify-api v6 reference docs _https://github.com/Shopify/shopify-api-js/blob/main/docs/reference/README.md_
+- @shopify/admin-graphql-api-utilities details _https://github.com/Shopify/quilt/blob/main/packages/admin-graphql-api-utilities/README.md_
+
+# Deployment
+
+- Follow these steps to deploy app, _https://shopify.dev/apps/deployment/web_
 
 # Credits
 
 Thanks to [tomotomy](https://github.com/tomotomy/shopify-app-template-node-typescript) and [KaiSpencer](https://github.com/KaiSpencer/shopify-app-template-node-ts) and [Michael Gibbons](https://github.com/Michael-Gibbons/OSB) shopify app starter template for many of the ideas and code samples used in this template.
+
+---
 
 # Shopify App Template - Node（Original）
 

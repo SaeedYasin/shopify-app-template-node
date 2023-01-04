@@ -1,5 +1,5 @@
-import { GraphqlQueryError } from "@shopify/shopify-api";
-import shopify from "./shopify.js";
+import { Session, GraphqlQueryError } from "@shopify/shopify-api";
+import shopify from "../shopify.js";
 
 const ADJECTIVES = [
   "autumn",
@@ -81,7 +81,7 @@ const CREATE_PRODUCTS_MUTATION = `
 `;
 
 export default async function productCreator(
-  session: any,
+  session: Session,
   count = DEFAULT_PRODUCTS_COUNT
 ) {
   const client = new shopify.api.clients.Graphql({ session });
@@ -100,7 +100,7 @@ export default async function productCreator(
         },
       });
     }
-  } catch (error: any) {
+  } catch (error) {
     if (error instanceof GraphqlQueryError) {
       throw new Error(
         `${error.message}\n${JSON.stringify(error.response, null, 2)}`

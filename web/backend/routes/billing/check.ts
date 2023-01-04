@@ -1,0 +1,40 @@
+import { Session } from "@shopify/shopify-api";
+import shopify from "../../shopify.js";
+
+const GET_ACTIVE_SUBSCRIPTION = `
+{
+  appInstallation {
+    activeSubscriptions {
+      name
+      status
+      lineItems {
+        plan {
+          pricingDetails {
+            ... on AppRecurringPricing {
+              __typename
+              price {
+                amount
+                currencyCode
+              }
+              interval
+            }
+          }
+        }
+      }
+      trialDays
+      test
+    }
+  }
+}
+`;
+
+export const check = async (session: Session) => {
+  const client = new shopify.api.clients.Graphql({ session });
+
+  // Send API request to get the active subscription
+  const response = await client.query({
+    data: GET_ACTIVE_SUBSCRIPTION,
+  });
+
+  return (response?.body as any).data;
+};

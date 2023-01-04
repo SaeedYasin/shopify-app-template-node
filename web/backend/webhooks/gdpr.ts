@@ -11,7 +11,12 @@ const GDPRWebhookHandlers: WebhookHandlersParam = {
   CUSTOMERS_DATA_REQUEST: {
     deliveryMethod: DeliveryMethod.Http,
     callbackUrl: "/api/webhooks",
-    callback: async (topic: any, shop: any, body: any, webhookId: any) => {
+    callback: async (
+      topic: string,
+      shop: string,
+      body: string,
+      webhookId: string
+    ) => {
       const payload = JSON.parse(body);
       // Payload has the following shape:
       // {
@@ -43,7 +48,12 @@ const GDPRWebhookHandlers: WebhookHandlersParam = {
   CUSTOMERS_REDACT: {
     deliveryMethod: DeliveryMethod.Http,
     callbackUrl: "/api/webhooks",
-    callback: async (topic: any, shop: any, body: any, webhookId: any) => {
+    callback: async (
+      topic: string,
+      shop: string,
+      body: string,
+      webhookId: string
+    ) => {
       const payload = JSON.parse(body);
       // Payload has the following shape:
       // {
@@ -72,7 +82,12 @@ const GDPRWebhookHandlers: WebhookHandlersParam = {
   SHOP_REDACT: {
     deliveryMethod: DeliveryMethod.Http,
     callbackUrl: "/api/webhooks",
-    callback: async (topic: any, shop: any, body: any, webhookId: any) => {
+    callback: async (
+      topic: string,
+      shop: string,
+      body: string,
+      webhookId: string
+    ) => {
       const payload = JSON.parse(body);
       // Payload has the following shape:
       // {
