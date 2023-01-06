@@ -114,7 +114,7 @@ Using yarn:
 yarn create @shopify/app
 ```
 
-Using npx:
+Using npm:
 
 ```shell
 npm init @shopify/app@latest
