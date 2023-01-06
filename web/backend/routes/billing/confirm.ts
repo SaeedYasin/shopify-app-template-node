@@ -1,8 +1,9 @@
-import shopify from "../../shopify.js";
-import shops from "../../prisma/database/shops.js";
-import { Request, Response } from "express";
-import { Plan } from "@prisma/client";
+import type { SubscriptionConfirmResponse } from "../../../@types/billing.js";
+import type { Plan } from "@prisma/client";
+import type { Request } from "express";
 import sessions from "../../prisma/database/sessions.js";
+import shops from "../../prisma/database/shops.js";
+import shopify from "../../shopify.js";
 // import analytics from "../../../lib/segment/index.js";
 
 const GET_ACTIVE_SUBSCRIPTION = `{
@@ -18,7 +19,7 @@ const GET_ACTIVE_SUBSCRIPTION = `{
     }
 }`;
 
-export const confirm = async (req: Request, _res: Response) => {
+export const confirm = async (req: Request) => {
   const query = req.query as Record<string, string>;
   const { charge_id, shop } = query;
   console.log(`Event Upgrade Confirm: ${shop} charge_id: ${charge_id}.`);
@@ -31,20 +32,20 @@ export const confirm = async (req: Request, _res: Response) => {
   const client = new shopify.api.clients.Graphql({ session });
 
   // Send API request to get the active subscription
-  const response = await client.query({
+  const response = await client.query<SubscriptionConfirmResponse>({
     data: GET_ACTIVE_SUBSCRIPTION,
   });
-  const resBody = response?.body as any;
+
   if (
-    !resBody?.data?.appInstallation?.activeSubscriptions ||
-    !resBody.data.appInstallation.activeSubscriptions.length
+    !response?.body?.data?.appInstallation?.activeSubscriptions ||
+    !response?.body.data.appInstallation.activeSubscriptions.length
   ) {
     throw `Invalid payload returned for ${shop} on ${charge_id}`;
   }
 
   // Get the active subscription
   const activeSubscription =
-    resBody?.data?.appInstallation?.activeSubscriptions[0];
+    response?.body?.data?.appInstallation?.activeSubscriptions[0];
   if (activeSubscription.status !== "ACTIVE") {
     throw `${shop} subscription status is not active on charge_id ${charge_id}`;
   }

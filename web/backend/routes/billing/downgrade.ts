@@ -1,8 +1,10 @@
+import type { SubscriptionCancelResponse } from "../../../@types/billing.js";
+import type { Request, Response } from "express";
+import type { Session } from "@shopify/shopify-api";
 import { composeGid } from "@shopify/admin-graphql-api-utilities";
-import shopify from "../../shopify.js";
 import shops from "../../prisma/database/shops.js";
-import { Request, Response } from "express";
-// import analytics from "../../../lib/segment/index.js";
+import shopify from "../../shopify.js";
+// import analytics from "../../../lib/segment/index";
 
 export const APP_SUBSCRIPTION_CANCEL = `mutation appSubscriptionCancel(
     $id: ID!
@@ -22,7 +24,7 @@ export const APP_SUBSCRIPTION_CANCEL = `mutation appSubscriptionCancel(
 }`;
 
 export const downgrade = async (req: Request, res: Response) => {
-  const session = res.locals.shopify.session;
+  const session: Session = res.locals.shopify.session;
   const shop = session.shop;
 
   // Retrieve shop data
@@ -41,7 +43,7 @@ export const downgrade = async (req: Request, res: Response) => {
   const client = new shopify.api.clients.Graphql({ session });
 
   // Send API request to cancel the subscription
-  const response = await client.query({
+  const response = await client.query<SubscriptionCancelResponse>({
     data: {
       query: APP_SUBSCRIPTION_CANCEL,
       variables: {
@@ -49,15 +51,15 @@ export const downgrade = async (req: Request, res: Response) => {
       },
     },
   });
-  const resBody = response?.body as any;
-  if (!resBody?.data?.appSubscriptionCancel) {
-    const error = resBody?.data?.appSubscriptionCreate?.userErrors;
+
+  if (!response?.body?.data?.appSubscriptionCancel) {
+    const error = response?.body?.data?.appSubscriptionCancel?.userErrors;
     console.error(error);
     throw `Invalid payload returned for ${shop} on ${chargeId}`;
   }
 
   // Make sure the API call was successful
-  const { status } = resBody.data.appSubscriptionCancel.appSubscription;
+  const { status } = response.body.data.appSubscriptionCancel.appSubscription;
   if (status !== "CANCELLED") {
     throw `Status of CANCELLED expected but received ${status}`;
   }

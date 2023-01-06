@@ -1,6 +1,8 @@
-import express from "express";
+import type { ShopDataResponse } from "../../@types/shop.js";
+import type { Session } from "@shopify/shopify-api";
 import shops from "../prisma/database/shops.js";
 import shopify from "../shopify.js";
+import express from "express";
 
 const shopRoutes = express.Router();
 
@@ -33,16 +35,15 @@ const GET_SHOP_DATA = `{
 
 shopRoutes.get("/", async (_req, res) => {
   try {
-    const session = res.locals.shopify.session;
-    const currentUser = session.onlineAccessInfo.associated_user;
+    const session: Session = res.locals.shopify.session;
+    const currentUser = session.onlineAccessInfo?.associated_user;
 
     const client = new shopify.api.clients.Graphql({ session });
-    const response = await client.query({
+    const response = await client.query<ShopDataResponse>({
       data: GET_SHOP_DATA,
     });
-    const resBody = response?.body as any;
 
-    res.status(200).send({ ...resBody, currentUser });
+    res.status(200).send({ ...response?.body?.data, currentUser });
   } catch (error) {
     console.log("Failed to process api request:", error);
     res.status(500).send((error as Error).message);
@@ -51,7 +52,7 @@ shopRoutes.get("/", async (_req, res) => {
 
 shopRoutes.get("/info", async (_req, res) => {
   try {
-    const session = res.locals.shopify.session;
+    const session: Session = res.locals.shopify.session;
     const { shop } = session;
 
     const shopInfo = await shops.getShop(shop);
@@ -69,7 +70,7 @@ shopRoutes.get("/info", async (_req, res) => {
 
 shopRoutes.post("/update", async (req, res) => {
   try {
-    const session = res.locals.shopify.session;
+    const session: Session = res.locals.shopify.session;
     const { shop } = session;
 
     const shopInfo = await shops.updateShop({ shop, ...req.body });

@@ -8,9 +8,8 @@ This is a template for building a [Shopify app] using Node and React with Typesc
 - Add some packages
   - Eslint
   - Prettier
-  - Types for existing packages
   - Prisma for easy database management
-- Define original types (There are still a few any types left)
+- Define original types
 - Add example app code with billing
 
 **Please feel free to contribute if you find some issues.**
@@ -47,6 +46,8 @@ cd shopify-app-ts && pnpm dev
 - Shopify-api v6 getting started _https://github.com/Shopify/shopify-api-js/blob/main/README.md#configurations_
 - Shopify-api v6 reference docs _https://github.com/Shopify/shopify-api-js/blob/main/docs/reference/README.md_
 - @shopify/admin-graphql-api-utilities details _https://github.com/Shopify/quilt/blob/main/packages/admin-graphql-api-utilities/README.md_
+- Typescript docs _https://www.typescriptlang.org/docs/_
+- [React typescript docs](https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/basic_type_example)
 
 # Deployment
 

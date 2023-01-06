@@ -1,4 +1,5 @@
-import express, { Request, Response } from "express";
+import express, { type Request, type Response } from "express";
+import type { Session } from "@shopify/shopify-api";
 import { upgrade } from "./upgrade.js";
 import { downgrade } from "./downgrade.js";
 import { confirm } from "./confirm.js";
@@ -9,7 +10,7 @@ const billingRoutes = express.Router();
 // GET api/billing -> Get subscription data
 billingRoutes.get("/", async (_req: Request, res: Response) => {
   try {
-    const session = res.locals.shopify.session;
+    const session: Session = res.locals.shopify.session;
     const data = await check(session);
     res.status(200).send(data);
   } catch (error) {
@@ -51,7 +52,7 @@ billingUnauthenticatedRoutes.get(
   "/confirm",
   async (req: Request, res: Response) => {
     try {
-      const { shop } = await confirm(req, res);
+      const { shop } = await confirm(req);
       res.redirect(
         `https://${shop}/admin/apps/${process.env.APP_SLUG}/settings`
       );

@@ -1,5 +1,5 @@
+import type { WebhookHandlersParam } from "@shopify/shopify-app-express";
 import { DeliveryMethod } from "@shopify/shopify-api";
-import { WebhookHandlersParam } from "@shopify/shopify-app-express";
 
 const GDPRWebhookHandlers: WebhookHandlersParam = {
   /**
@@ -18,6 +18,7 @@ const GDPRWebhookHandlers: WebhookHandlersParam = {
       webhookId: string
     ) => {
       const payload = JSON.parse(body);
+      console.log("Got customers data request", webhookId, payload);
       // Payload has the following shape:
       // {
       //   "shop_id": 954889,
@@ -55,6 +56,7 @@ const GDPRWebhookHandlers: WebhookHandlersParam = {
       webhookId: string
     ) => {
       const payload = JSON.parse(body);
+      console.log("Got customers redact", webhookId, payload);
       // Payload has the following shape:
       // {
       //   "shop_id": 954889,
@@ -89,6 +91,7 @@ const GDPRWebhookHandlers: WebhookHandlersParam = {
       webhookId: string
     ) => {
       const payload = JSON.parse(body);
+      console.log("Got shop redact", webhookId, payload);
       // Payload has the following shape:
       // {
       //   "shop_id": 954889,

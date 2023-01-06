@@ -1,6 +1,8 @@
-import shopify from "../../shopify.js";
+import type { SubscriptionCreateResponse } from "../../../@types/billing.js";
+import type { Session } from "@shopify/shopify-api";
+import type { Request, Response } from "express";
 import shops from "../../prisma/database/shops.js";
-import { Request, Response } from "express";
+import shopify from "../../shopify.js";
 
 const subscriptionPlan = {
   name: "$9.99 Plan",
@@ -42,7 +44,7 @@ const APP_SUBSCRIPTION_CREATE = `mutation appSubscribe(
 }`;
 
 export const upgrade = async (req: Request, res: Response) => {
-  const session = res.locals.shopify.session;
+  const session: Session = res.locals.shopify.session;
   const shop = session.shop;
 
   const shopData = await shops.getShop(shop);
@@ -61,19 +63,18 @@ export const upgrade = async (req: Request, res: Response) => {
     price: subscriptionPlan.price,
   };
 
-  // Send Creation Query
-  const response = await client.query({
+  const response = await client.query<SubscriptionCreateResponse>({
     data: {
       query: APP_SUBSCRIPTION_CREATE,
       variables: subscriptionInput,
     },
   });
-  const resBody = response?.body as any;
-  if (!resBody?.data?.appSubscriptionCreate?.confirmationUrl) {
-    const error = resBody?.data?.appSubscriptionCreate?.userErrors;
+
+  if (!response?.body?.data?.appSubscriptionCreate?.confirmationUrl) {
+    const error = response?.body?.data?.appSubscriptionCreate?.userErrors;
     console.error(error);
     throw `Invalid payload returned for ${shop}`;
   }
 
-  return resBody.data.appSubscriptionCreate.confirmationUrl;
+  return response?.body.data.appSubscriptionCreate.confirmationUrl;
 };

@@ -1,6 +1,6 @@
-import express from "express";
+import productCreator from "../services/product-creator.js";
 import shopify from "../shopify.js";
-import productCreator from "./product-creator.js";
+import express from "express";
 
 const productRoutes = express.Router();
 

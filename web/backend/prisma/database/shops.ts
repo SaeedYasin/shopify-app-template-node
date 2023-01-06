@@ -1,4 +1,4 @@
-import { Prisma, Shop, ShopData, Subscription } from "@prisma/client";
+import type { Shop, ShopCreate, ShopUpdate } from "../../../@types/shop.js";
 import prisma, { tryCatch } from "./client.js";
 
 export default {
@@ -6,11 +6,6 @@ export default {
   createShop,
   updateShop,
   deleteShop,
-};
-
-type TShop = Shop & {
-  subscription: Subscription;
-  shopData: ShopData;
 };
 
 async function getShop(shop: string) {
@@ -25,11 +20,11 @@ async function getShop(shop: string) {
       },
     });
   });
-  if (!error) return data as TShop;
+  if (!error) return data as Shop;
   return undefined;
 }
 
-async function createShop(data: Prisma.ShopCreateInput) {
+async function createShop(data: ShopCreate) {
   const { error } = await tryCatch(async () => {
     return await prisma.shop.create({
       data: {
@@ -44,7 +39,7 @@ async function createShop(data: Prisma.ShopCreateInput) {
   return true;
 }
 
-async function updateShop(data: Prisma.ShopUpdateInput) {
+async function updateShop(data: ShopUpdate) {
   const { data: shop, error } = await tryCatch(async () => {
     return await prisma.shop.update({
       where: {
@@ -53,7 +48,7 @@ async function updateShop(data: Prisma.ShopUpdateInput) {
       data,
     });
   });
-  if (!error) return shop as TShop;
+  if (!error) return shop as Shop;
   return undefined;
 }
 

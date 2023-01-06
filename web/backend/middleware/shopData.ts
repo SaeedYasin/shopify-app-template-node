@@ -1,7 +1,8 @@
-import shopify from "../shopify.js";
-import { Session, HttpResponseError } from "@shopify/shopify-api";
-import { Express, Request, Response, NextFunction } from "express";
+import type { Session, HttpResponseError } from "@shopify/shopify-api";
+import type { Express, Request, Response, NextFunction } from "express";
+import type { ShopDataResponse } from "../../@types/shop.js";
 import shops from "../prisma/database/shops.js";
+import shopify from "../shopify.js";
 
 const GET_SHOP_DATA = `{
   shop {
@@ -33,7 +34,7 @@ const GET_SHOP_DATA = `{
 async function updateShopData(app: Express, session: Session) {
   const existingShop = await shops.getShop(session.shop);
   console.log("Get shop data returned:", existingShop);
-  let fetchShopData = true;
+  const fetchShopData = true;
   // const betaUsers = [""];
 
   if (!existingShop) {
@@ -56,9 +57,11 @@ async function updateShopData(app: Express, session: Session) {
     //   userId: shop,
     // });
   } else {
-    if (existingShop.shopData) {
-      fetchShopData = false;
-    }
+    // We fetch and update shop data on every reauth,
+    // uncomment code below if that's not desired
+    // if (existingShop.shopData) {
+    //   fetchShopData = false;
+    // }
 
     if (!existingShop.isInstalled) {
       // This is a REINSTALL
@@ -97,19 +100,23 @@ async function updateShopData(app: Express, session: Session) {
       //   userId: session.shop,
       // });
 
-      const res = await client.query({ data: GET_SHOP_DATA });
-      const resBody = res?.body as any;
+      const res = await client.query<ShopDataResponse>({ data: GET_SHOP_DATA });
 
-      if (!resBody?.data?.shop) {
+      if (!res?.body?.data?.shop) {
         console.warn(`Missing shop data on ${session.shop}`);
       } else {
-        const shopData = resBody.data.shop;
+        const shopData = res.body.data.shop;
         console.log("Got shops data", shopData);
 
         await shops.updateShop({
           shop: session.shop,
           shopData: {
-            create: shopData,
+            connectOrCreate: {
+              where: {
+                shop: session.shop,
+              },
+              create: shopData,
+            },
           },
         });
       }

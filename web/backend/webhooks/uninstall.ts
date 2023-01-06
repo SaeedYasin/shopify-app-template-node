@@ -23,13 +23,12 @@ async function uninstall(shop: string) {
 }
 
 export default async function addUninstallWebhookHandler() {
-  console.log("Registering webhook for uninstall app");
-
   await shopify.api.webhooks.addHandlers({
     APP_UNINSTALLED: {
       deliveryMethod: DeliveryMethod.Http,
       callbackUrl: "/api/webhooks",
       callback: async (topic: string, shop: string) => {
+        console.log("Uninstall app webhook invoked", topic, shop);
         await uninstall(shop);
       },
     },
