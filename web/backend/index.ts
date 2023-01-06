@@ -3,6 +3,7 @@ import { join } from "path";
 import { readFileSync } from "fs";
 import express from "express";
 import type { Request, Response, NextFunction } from "express";
+import type { Session } from "@shopify/shopify-api";
 import serveStatic from "serve-static";
 import shopify from "./shopify.js";
 
@@ -52,18 +53,23 @@ await addUninstallWebhookHandler();
 app.use("/api/billing", billingUnauthenticatedRoutes);
 
 // All endpoints after this point will require an active session
-app.use("/api/*", [
-  shopify.validateAuthenticatedSession(),
-  (req: Request, res: Response, next: NextFunction) => {
-    const session = res.locals.shopify.session;
-    console.log(
-      "-->",
-      req.baseUrl + req.path,
-      "| { shop: " + session.shop + " }"
-    );
-    return next();
-  },
-]);
+app.use("/api/*", shopify.validateAuthenticatedSession());
+
+// Print all requested paths
+app.use("/*", (req: Request, res: Response, next: NextFunction) => {
+  const shop = req.query.shop;
+  if (shop) {
+    console.log("-->", req.baseUrl + req.path, "| { shop: " + shop + " }");
+  }
+  return next();
+});
+
+app.use("/api/*", (req: Request, res: Response, next: NextFunction) => {
+  const session: Session = res.locals?.shopify?.session;
+  const shop = session?.shop;
+  console.log("-->", req.baseUrl + req.path, "| { shop: " + shop + " }");
+  return next();
+});
 
 app.use(express.json());
 app.use("/api/products", productRoutes);

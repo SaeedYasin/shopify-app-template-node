@@ -34,7 +34,7 @@ async function storeCallback(session: Session) {
 }
 
 async function loadCallback(id: string) {
-  console.log("loadCallback called with id:", id);
+  // console.log("loadCallback called with id:", id);
   const { data, error } = await tryCatch(async () => {
     return await prisma.session.findFirst({
       where: {
@@ -44,7 +44,13 @@ async function loadCallback(id: string) {
   });
   if (!error) {
     if (!data) return undefined;
-    return JSON.parse(data.session) as Session;
+    const session = JSON.parse(data.session) as Session;
+    //////////////////////////////////////////////////////////////////////////////
+    // Workaround until https://github.com/Shopify/shopify-api-js/issues/573 is fixed
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    session.isActive = (_scopes: string | string[]) => true;
+    //////////////////////////////////////////////////////////////////////////////
+    return session;
   }
   return undefined;
 }

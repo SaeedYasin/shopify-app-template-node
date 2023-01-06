@@ -1,4 +1,4 @@
-import { LATEST_API_VERSION } from "@shopify/shopify-api";
+import { LATEST_API_VERSION, LogSeverity } from "@shopify/shopify-api";
 // import { BillingInterval } from "@shopify/shopify-api";
 import { shopifyApp } from "@shopify/shopify-app-express";
 import sessions from "./prisma/database/sessions.js";
@@ -24,6 +24,9 @@ const shopify = shopifyApp({
     apiVersion: LATEST_API_VERSION,
     restResources,
     billing: undefined, // or replace with billingConfig above to enable example billing
+    logger: {
+      level: LogSeverity.Warning,
+    },
   },
   auth: {
     path: "/api/auth",
