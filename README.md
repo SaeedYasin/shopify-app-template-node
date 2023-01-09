@@ -1,4 +1,4 @@
-# Shopify App Template - Node with Typescript
+# 🧩Shopify App Template - Node with Typescript
 
 This is a template for building a [Shopify app] using Node and React with Typescript.
 
@@ -16,23 +16,25 @@ This is a template for building a [Shopify app] using Node and React with Typesc
 
 ## Quickstart
 
-1. Clone the repo
+1. Clone the repo,
 
 ```sh
 npx degit SaeedYasin/shopify-app-template-node shopify-app-ts && npx degit SaeedYasin/shopify-frontend-template-react shopify-app-ts/web/frontend
 ```
 
-2. Go to your app's directory and install packages
+2. Go to your app's directory and install packages.
 
 ```sh
 cd shopify-app-ts && pnpm i
 ```
 
-3. Go to `shopify-app-ts/web` folder and rename `.env.example` to `.env` and fill the value for `DATABASE_URL` etc
+3. You can delete the `.gitmodules` file.
 
-4. On shopify partner's dashboard, select your app and then go to "App setup". In the "Protected customer data access" section click "request Access" and then fill out all information, give reasons for all fields like name/email/phone/address. If your app doesn't need this info then you can edit this info in `shopify-app-ts\web\middleware\shopData.ts`.
+4. Go to `shopify-app-ts/web` folder and rename `.env.example` to `.env` and fill the values.
 
-5. Go to your app's directory and then run the app
+5. On shopify partner's dashboard, select your app and then go to "App setup". In the "Protected customer data access" section click "request Access" and then fill out all information, give reasons for all fields like name/email/phone/address. If your app doesn't need this info then you can edit this info in `shopify-app-ts\web\middleware\shopData.ts`.
+
+6. Go to your app's directory and then run the app,
 
 ```sh
 cd shopify-app-ts && pnpm dev
@@ -51,7 +53,26 @@ cd shopify-app-ts && pnpm dev
 
 # Deployment
 
-- Follow these steps to deploy app, _https://shopify.dev/apps/deployment/web_
+- Create a SECOND public app in your Shopify partner account. As App url and allowed redirect urls simply add https://localhost/ for now. It's important to have two apps, one created previously for development and a new one which will be your production app. I would suggest to call them differently, I simply use the same name and add "(development)" in the name of the one I use in development.
+- Deploy to any hosting service and configure your env variables on it (from the production app we just created) and get its public URL.
+- Go to your newly created app (the production one) in shopify partners dashboard and in your app setup, paste the url from your hosting service in the App url (e.g https://your-app-domain.com/), and in the Allowed redirection URL(s) add the same url with the suffix /auth/callback, /auth/shopify/callback and /api/auth/callback e-g,
+
+```sh
+https://your-app-domain.com/auth/callback
+https://your-app-domain.com/auth/shopify/callback
+https://your-app-domain.com/api/auth/callback
+```
+
+- Add your gdpr routes as well i-e https://your-app-domain.com/api/webhooks/customers_data_request, https://your-app-domain.com/api/webhooks/customers_redact, https://your-app-domain.com/api/webhooks/shop_redact.
+- Then using https://your-app-domain.com?shop=your-shop-name.myshopify.com you can install the app to test it out.
+
+- We can also follow these steps to deploy app on fly.io or heroku, _https://shopify.dev/apps/deployment/web_
+  - Fly.io setting up MySQL _https://fly.io/docs/app-guides/mysql-on-fly_
+  - Fly.io autoscalling _https://fly.io/docs/reference/scaling_
+
+Every time you work on your development app, you can just follow the workflow described above, and when you are ready to push your changes to production, you will simply need to commit and push your changes to Github as normal, and your hosting service maybe can pick up these new changes and push to your app and deploy the new changes to your hosted app.
+
+This means, one code base but 2 apps, this is the most common workflow used by App Developers. 🎉
 
 # Credits
 

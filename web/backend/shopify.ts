@@ -26,6 +26,7 @@ const shopify = shopifyApp({
     billing: undefined, // or replace with billingConfig above to enable example billing
     logger: {
       level: LogSeverity.Warning,
+      timestamps: true,
     },
   },
   auth: {

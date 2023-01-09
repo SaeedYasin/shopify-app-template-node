@@ -91,4 +91,4 @@ app.use("/*", shopify.ensureInstalledOnShop(), async (_req, res) => {
 });
 
 app.listen(PORT);
-console.log("App started...");
+console.log(`App running on port: ${PORT} ...`);
