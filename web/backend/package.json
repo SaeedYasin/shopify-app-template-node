@@ -25,7 +25,7 @@
     "@prisma/client": "^4.8.0",
     "@shopify/admin-graphql-api-utilities": "^2.0.1",
     "@shopify/shopify-api": "^6.0.2",
-    "@shopify/shopify-app-express": "^1.0.2",
+    "@shopify/shopify-app-express": "^1.1.0",
     "@shopify/shopify-app-session-storage-sqlite": "^1.0.1",
     "compression": "^1.7.4",
     "cross-env": "^7.0.3",
