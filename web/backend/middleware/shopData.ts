@@ -81,6 +81,11 @@ async function updateShopData(app: Express, session: Session) {
         subscription: {
           update: {
             active: true,
+            plan: "TRIAL",
+            createdAt: new Date(),
+            upgradedAt: null,
+            currentPeriodEnd: null,
+            chargeId: null,
           },
         },
       });

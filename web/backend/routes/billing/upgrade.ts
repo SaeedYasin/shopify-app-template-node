@@ -59,7 +59,9 @@ export const upgrade = async (req: Request, res: Response) => {
     name: `${subscriptionPlan.name}`,
     returnUrl: `${process.env.HOST}/api/billing/confirm?shop=${shop}`,
     trialDays:
-      shopData.subscription.trialDays || subscriptionPlan.trialDuration,
+      shopData?.subscription?.trialDays === undefined
+        ? subscriptionPlan.trialDuration
+        : shopData.subscription.trialDays,
     test: isTestCharge,
     price: subscriptionPlan.price,
   };
