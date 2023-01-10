@@ -17,10 +17,13 @@ export interface ShopData {
     shopifyPlus: boolean;
   };
   billingAddress: {
-    name: string;
+    address1: string;
+    address2: string;
+    formatted: string[];
     company: string;
     city: string;
     country: string;
+    zip: string;
     phone: string;
   };
 }

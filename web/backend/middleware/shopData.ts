@@ -22,10 +22,13 @@ const GET_SHOP_DATA = `{
       shopifyPlus
     }
     billingAddress {
-      name
+      address1
+      address2
+      formatted
       company
       city
       country
+      zip
       phone
     }
   }
@@ -111,11 +114,9 @@ async function updateShopData(app: Express, session: Session) {
         await shops.updateShop({
           shop: session.shop,
           shopData: {
-            connectOrCreate: {
-              where: {
-                shop: session.shop,
-              },
+            upsert: {
               create: shopData,
+              update: shopData,
             },
           },
         });

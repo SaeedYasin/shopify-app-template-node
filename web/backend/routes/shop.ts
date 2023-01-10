@@ -24,10 +24,13 @@ const GET_SHOP_DATA = `{
       shopifyPlus
     }
     billingAddress {
-      name
+      address1
+      address2
+      formatted
       company
       city
       country
+      zip
       phone
     }
   }
