@@ -1,4 +1,5 @@
 import type { Session } from "@shopify/shopify-api";
+import { AuthScopes } from "@shopify/shopify-api/lib/auth/scopes/index.js";
 import prisma, { tryCatch } from "./client.js";
 
 export default {
@@ -10,8 +11,25 @@ export default {
   deleteSessions,
 };
 
+const isActiveFn: (scopes: string | string[] | AuthScopes) => boolean =
+  function (scopes) {
+    // @ts-ignore
+    const scopesUnchanged = scopes.equals(this.scope);
+    if (
+      scopesUnchanged &&
+      // @ts-ignore
+      this.accessToken &&
+      // @ts-ignore
+      (!this.expires || this.expires >= new Date())
+    ) {
+      return true;
+    }
+    return false;
+  };
+
 async function storeCallback(session: Session) {
   console.log("storeCallback called with session:", session);
+  console.log("session.isActive:", session.isActive);
 
   const { error } = await tryCatch(async () => {
     return await prisma.session.upsert({
@@ -48,8 +66,7 @@ async function loadCallback(id: string) {
     const session = JSON.parse(data.session) as Session;
     //////////////////////////////////////////////////////////////////////////////
     // Workaround until https://github.com/Shopify/shopify-api-js/issues/573 is fixed
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    session.isActive = (_scopes: string | string[]) => true;
+    session.isActive = isActiveFn;
     //////////////////////////////////////////////////////////////////////////////
     return session;
   }
