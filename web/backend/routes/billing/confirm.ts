@@ -1,10 +1,10 @@
 import type { SubscriptionConfirmResponse } from "../../../@types/billing.js";
 import type { Plan } from "@prisma/client";
 import type { Request } from "express";
+import mixpanel from "../../lib/mixpanel.js";
 import sessions from "../../prisma/database/sessions.js";
 import shops from "../../prisma/database/shops.js";
 import shopify from "../../shopify.js";
-// import analytics from "../../../lib/segment/index.js";
 
 const GET_ACTIVE_SUBSCRIPTION = `{
 	appInstallation {
@@ -72,11 +72,18 @@ export const confirm = async (req: Request) => {
     },
   });
 
-  // analytics.track({
-  //   userId: shop,
-  //   event: "Subscription activated",
-  //   properties: subscriptionData,
-  // });
+  mixpanel.track("Subscription activated", {
+    shop,
+    distinct_id: shop,
+    plan: subscriptionData.plan,
+    active: subscriptionData.active,
+    test: subscriptionData.test,
+    trialDays: subscriptionData.trialDays,
+    currentPeriodEnd: subscriptionData.currentPeriodEnd,
+    createdAt: subscriptionData.createdAt,
+    upgradedAt: subscriptionData.upgradedAt,
+    chargeId: subscriptionData.chargeId,
+  });
 
   console.log(`Event Upgrade: ${shopData?.shop} upgraded to paid plan.`);
 

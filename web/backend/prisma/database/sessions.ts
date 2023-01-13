@@ -12,6 +12,7 @@ export default {
 
 async function storeCallback(session: Session) {
   console.log("storeCallback called with session:", session);
+
   const { error } = await tryCatch(async () => {
     return await prisma.session.upsert({
       where: {

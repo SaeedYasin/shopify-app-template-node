@@ -1,6 +1,7 @@
 import type { Session, HttpResponseError } from "@shopify/shopify-api";
 import type { Express, Request, Response, NextFunction } from "express";
 import type { ShopDataResponse } from "../../@types/shop.js";
+import mixpanel from "../lib/mixpanel.js";
 import shops from "../prisma/database/shops.js";
 import shopify from "../shopify.js";
 
@@ -37,7 +38,7 @@ const GET_SHOP_DATA = `{
 async function updateShopData(app: Express, session: Session) {
   const existingShop = await shops.getShop(session.shop);
   console.log("Get shop data returned:", existingShop);
-  const fetchShopData = true;
+  let fetchShopData = true;
   // const betaUsers = [""];
 
   if (!existingShop) {
@@ -55,16 +56,15 @@ async function updateShopData(app: Express, session: Session) {
     });
 
     // Track install event
-    // analytics.track({
-    //   event: "install",
-    //   userId: shop,
-    // });
+    mixpanel.track("App Install", {
+      shop: session.shop,
+      distinct_id: session.shop,
+      installCount: 1,
+    });
   } else {
-    // We fetch and update shop data on every reauth,
-    // uncomment code below if that's not desired
-    // if (existingShop.shopData) {
-    //   fetchShopData = false;
-    // }
+    if (existingShop.shopData) {
+      fetchShopData = false;
+    }
 
     if (!existingShop.isInstalled) {
       // This is a REINSTALL
@@ -91,10 +91,11 @@ async function updateShopData(app: Express, session: Session) {
       });
 
       // Track reinstall event
-      // analytics.track({
-      //   event: "reinstall",
-      //   userId: shop,
-      // });
+      mixpanel.track("App ReInstall", {
+        shop: session.shop,
+        distinct_id: session.shop,
+        installCount: existingShop.installCount + 1,
+      });
     }
   }
 
@@ -103,10 +104,10 @@ async function updateShopData(app: Express, session: Session) {
       const client = new shopify.api.clients.Graphql({ session });
 
       // Track reauth event
-      // analytics.track({
-      //   event: "reauth",
-      //   userId: session.shop,
-      // });
+      mixpanel.track("App ReAuth", {
+        shop: session.shop,
+        distinct_id: session.shop,
+      });
 
       const res = await client.query<ShopDataResponse>({ data: GET_SHOP_DATA });
 

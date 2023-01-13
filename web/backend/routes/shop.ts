@@ -53,6 +53,22 @@ shopRoutes.get("/", async (_req, res) => {
   }
 });
 
+shopRoutes.get("/name", async (_req, res) => {
+  try {
+    const session: Session = res.locals.shopify.session;
+    const { shop } = session;
+
+    if (shop) {
+      res.status(200).send({ shop });
+    } else {
+      throw new Error(`Error while fetching shop name for shop ${shop}`);
+    }
+  } catch (error) {
+    console.log("Failed to process api request:", error);
+    res.status(500).send((error as Error).message);
+  }
+});
+
 shopRoutes.get("/info", async (_req, res) => {
   try {
     const session: Session = res.locals.shopify.session;

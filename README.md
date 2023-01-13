@@ -30,7 +30,7 @@ cd shopify-app-ts && pnpm i
 
 3. You can delete the `.gitmodules` file.
 
-4. Go to `shopify-app-ts/web` folder and rename `.env.example` to `.env` and fill the values.
+4. Go to `shopify-app-ts/web/backend` folder and rename `.env.example` to `.env` and fill the values. Do same for `shopify-app-ts/web/frontend` folder.
 
 5. On shopify partner's dashboard, select your app and then go to "App setup". In the "Protected customer data access" section click "request Access" and then fill out all information, give reasons for all fields like name/email/phone/address. If your app doesn't need this info then you can edit this info in `shopify-app-ts\web\middleware\shopData.ts`.
 

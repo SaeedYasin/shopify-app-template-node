@@ -1,4 +1,5 @@
 {
   "editor.formatOnSave": true,
-  "liquid.format.enable": true
+  "liquid.format.enable": true,
+  "editor.tabSize": 2
 }

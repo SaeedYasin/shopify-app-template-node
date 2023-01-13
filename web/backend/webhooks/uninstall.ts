@@ -1,4 +1,5 @@
 import { DeliveryMethod } from "@shopify/shopify-api";
+import mixpanel from "../lib/mixpanel.js";
 import shops from "../prisma/database/shops.js";
 import shopify from "../shopify.js";
 
@@ -41,10 +42,11 @@ async function uninstall(shop: string) {
     },
   });
 
-  // analytics.track({
-  //   event: "uninstall",
-  //   userId: shop,
-  // });
+  mixpanel.track("App Uninstall", {
+    shop,
+    distinct_id: shop,
+    trialDaysLeft: trialDaysObj ? trialDaysObj.trialDays : "Unknonwn",
+  });
 }
 
 export default async function addUninstallWebhookHandler() {
