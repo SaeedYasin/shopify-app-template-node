@@ -50,8 +50,11 @@ cd shopify-app-ts && pnpm dev
 - @shopify/admin-graphql-api-utilities details _https://github.com/Shopify/quilt/blob/main/packages/admin-graphql-api-utilities/README.md_
 - Typescript docs _https://www.typescriptlang.org/docs/_
 - [React typescript docs](https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/basic_type_example)
+- [Shopify Polaris Documents](https://polaris.shopify.com/)
 
 # Deployment
+
+- _https://www.shopify.com/partners/blog/oauth-recommendations_
 
 - Create a SECOND public app in your Shopify partner account. As App url and allowed redirect urls simply add https://localhost/ for now. It's important to have two apps, one created previously for development and a new one which will be your production app. I would suggest to call them differently, I simply use the same name and add "(development)" in the name of the one I use in development.
 - Deploy to any hosting service and configure your env variables on it (from the production app we just created) and get its public URL.
