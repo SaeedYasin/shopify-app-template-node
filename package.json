@@ -15,5 +15,9 @@
   "dependencies": {
     "@shopify/app": "^3.33.0",
     "@shopify/cli": "^3.33.0"
+  },
+  "devDependencies": {
+    "@shopify/prettier-plugin-liquid": "^1.0.6",
+    "prettier": "^2.8.3"
   }
 }
