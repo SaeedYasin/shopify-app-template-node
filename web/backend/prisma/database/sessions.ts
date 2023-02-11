@@ -1,5 +1,4 @@
-import type { Session } from "@shopify/shopify-api";
-import { AuthScopes } from "@shopify/shopify-api/lib/auth/scopes/index.js";
+import { Session } from "@shopify/shopify-api";
 import prisma, { tryCatch } from "./client.js";
 
 export default {
@@ -11,25 +10,8 @@ export default {
   deleteSessions,
 };
 
-const isActiveFn: (scopes: string | string[] | AuthScopes) => boolean =
-  function (scopes) {
-    // @ts-ignore
-    const scopesUnchanged = scopes.equals(this.scope);
-    if (
-      scopesUnchanged &&
-      // @ts-ignore
-      this.accessToken &&
-      // @ts-ignore
-      (!this.expires || this.expires >= new Date())
-    ) {
-      return true;
-    }
-    return false;
-  };
-
 async function storeCallback(session: Session) {
   console.log("storeCallback called with session:", session);
-  console.log("session.isActive:", session.isActive);
 
   const { error } = await tryCatch(async () => {
     return await prisma.session.upsert({
@@ -38,12 +20,12 @@ async function storeCallback(session: Session) {
       },
       update: {
         id: session.id,
-        session: JSON.stringify(session),
+        session: JSON.stringify(session.toPropertyArray()),
         shop: session.shop,
       },
       create: {
         id: session.id,
-        session: JSON.stringify(session),
+        session: JSON.stringify(session.toPropertyArray()),
         shop: session.shop,
       },
     });
@@ -63,12 +45,8 @@ async function loadCallback(id: string) {
   });
   if (!error) {
     if (!data) return undefined;
-    const session = JSON.parse(data.session) as Session;
-    //////////////////////////////////////////////////////////////////////////////
-    // Workaround until https://github.com/Shopify/shopify-api-js/issues/573 is fixed
-    session.isActive = isActiveFn;
-    //////////////////////////////////////////////////////////////////////////////
-    return session;
+    const session = JSON.parse(data.session);
+    return Session.fromPropertyArray(session);
   }
   return undefined;
 }
