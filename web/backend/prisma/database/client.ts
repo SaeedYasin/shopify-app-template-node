@@ -2,8 +2,6 @@ import { Prisma } from "@prisma/client";
 import Prisma1, * as Prisma2 from "@prisma/client";
 const Prisma3 = Prisma1 || Prisma2;
 
-// type PrismaClient = InstanceType<typeof Prisma3.PrismaClient>;
-
 const prisma = new Prisma3.PrismaClient({ errorFormat: "minimal" });
 export default prisma;
 
