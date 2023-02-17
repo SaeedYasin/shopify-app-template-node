@@ -28,11 +28,15 @@ npx degit SaeedYasin/shopify-app-template-node shopify-app-ts && npx degit Saeed
 cd shopify-app-ts && pnpm i
 ```
 
-3. You can delete the `.gitmodules` file.
+3. You can delete the `.gitmodules` file. You can also remove the `extensions` folder, if you don't want to deal with installing `Ruby` etc for theme app extensions.
 
-4. Go to `shopify-app-ts/web/backend` folder and rename `.env.example` to `.env` and fill the values. Do same for `shopify-app-ts/web/frontend` folder.
+4. Go to `shopify-app-ts/web/backend` folder and rename `.env.example` to `.env` and fill the values. Do the same for `shopify-app-ts/web/frontend` folder. You can create a new app on the shopify partner's dashboard if you don't have one.
 
-5. On shopify partner's dashboard, select your app and then go to "App setup". In the "Protected customer data access" section click "request Access" and then fill out all information, give reasons for all fields like name/email/phone/address. If your app doesn't need this info then you can edit this info in `shopify-app-ts\web\middleware\shopData.ts`.
+5. You can remove the web/backend/prisma/migrations folder. Make sure your database schema is already created and then run,
+
+```sh
+cd web/backend && npx prisma db push
+```
 
 6. Go to your app's directory and then run the app,
 
@@ -51,6 +55,10 @@ cd shopify-app-ts && pnpm dev
 - Typescript docs _https://www.typescriptlang.org/docs/_
 - [React typescript docs](https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/basic_type_example)
 - [Shopify Polaris Documents](https://polaris.shopify.com/)
+- Get built for shopify badge, _https://shopify.dev/docs/apps/store/quality-promotion/built-for-shopify_
+- UX guidelines for theme app extensions, _https://shopify.dev/docs/apps/online-store/theme-app-extensions/ux-guidelines#merchant-onboarding_
+- Important requirements for apps in the Shopify App Store, _https://shopify.dev/docs/apps/store/requirements_
+- Testing your app before submitting, _https://shopify.dev/docs/apps/store/review/testing_
 
 # Deployment
 
