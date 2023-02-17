@@ -66,8 +66,15 @@ https://your-app-domain.com/auth/shopify/callback
 https://your-app-domain.com/api/auth/callback
 ```
 
-- Add your gdpr routes as well i-e https://your-app-domain.com/api/webhooks/customers_data_request, https://your-app-domain.com/api/webhooks/customers_redact, https://your-app-domain.com/api/webhooks/shop_redact.
-- Then using https://your-app-domain.com?shop=your-shop-name.myshopify.com you can install the app to test it out.
+- Add your gdpr routes as well, add this same path shown below for all 3 routes of `customers/data_request`, `customers/redact` and `shop/redact`. HMAC validation is now done internally by shopify-api [processWebhooks function](https://github.com/Shopify/shopify-api-js/blob/main/lib/webhooks/process.ts#L53), so you don't need to do it manually.
+
+```sh
+https://your-app-domain.com/api/webhooks
+```
+
+You can use _https://shopify.dev/docs/apps/tools/cli/commands#webhook-trigger_ to test your webhooks during dev using the command `pnpm shopify webhook trigger`. For testing GDPR webhooks directly from shopify test store dashboard, you need to add e-g `read_customers` scope in your app.
+
+- Then using https://your-app-domain.com?shop=your-shop-name.myshopify.com&host=YourHostValue you can install the app to test it out.
 
 - We can also follow these steps to deploy app on fly.io or heroku, _https://shopify.dev/apps/deployment/web_
   - Fly.io setting up MySQL _https://fly.io/docs/app-guides/mysql-on-fly_

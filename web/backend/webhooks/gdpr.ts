@@ -1,6 +1,12 @@
 import type { WebhookHandlersParam } from "@shopify/shopify-app-express";
 import { DeliveryMethod } from "@shopify/shopify-api";
 
+// https://shopify.dev/docs/apps/webhooks/configuration/mandatory-webhooks#customers-data_request
+// NOTE: We can't return back any data to these webhooks, according to shopify docs,
+// "Once this webhook is triggered, It's your responsibility to provide this data
+// to the store owner directly. In some cases, a customer record contains only
+// the customer's email address."
+
 const GDPRWebhookHandlers: WebhookHandlersParam = {
   /**
    * Customers can request their data from a store owner. When this happens,
