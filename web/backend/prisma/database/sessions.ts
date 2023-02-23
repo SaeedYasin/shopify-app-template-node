@@ -75,7 +75,7 @@ async function findSessions(shop: string) {
   });
   if (!error) {
     if (!data) return [];
-    return data.map((d) => JSON.parse(d.session) as Session);
+    return data.map((d) => Session.fromPropertyArray(JSON.parse(d.session)));
   }
   return [];
 }

@@ -35,7 +35,7 @@ cd shopify-app-ts && pnpm i
 5. You can remove the web/backend/prisma/migrations folder. Make sure your database schema is already created and then run,
 
 ```sh
-cd web/backend && npx prisma db push
+cd web/backend && npx prisma migrate dev
 ```
 
 6. Go to your app's directory and then run the app,
