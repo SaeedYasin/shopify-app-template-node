@@ -1,5 +1,5 @@
-import type { Shop, ShopCreate, ShopUpdate } from "../../../@types/shop.js";
-import prisma, { tryCatch } from "./client.js";
+import type { Shop, ShopCreate, ShopUpdate } from "../../../@types/shop";
+import prisma, { tryCatch } from "./client";
 
 export default {
   getShop,

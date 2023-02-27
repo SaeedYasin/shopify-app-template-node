@@ -5,21 +5,21 @@ import express from "express";
 import type { Request, Response, NextFunction } from "express";
 import type { Session } from "@shopify/shopify-api";
 import serveStatic from "serve-static";
-import shopify from "./shopify.js";
+import shopify from "./shopify";
 
 // Import Middleware
-import updateShopDataMiddleware from "./middleware/shopData.js";
+import updateShopDataMiddleware from "./middleware/shopData";
 
 // Import Webhooks
-import addUninstallWebhookHandler from "./webhooks/uninstall.js";
-import GDPRWebhookHandlers from "./webhooks/gdpr.js";
+import addUninstallWebhookHandler from "./webhooks/uninstall";
+import GDPRWebhookHandlers from "./webhooks/gdpr";
 
 // Import Routes
-import productRoutes from "./routes/products.js";
-import shopRoutes from "./routes/shop.js";
+import productRoutes from "./routes/products";
+import shopRoutes from "./routes/shop";
 import billingRoutes, {
   billingUnauthenticatedRoutes,
-} from "./routes/billing/index.js";
+} from "./routes/billing/index";
 
 const PORT = parseInt(
   process.env.BACKEND_PORT || process.env.PORT || "8081",

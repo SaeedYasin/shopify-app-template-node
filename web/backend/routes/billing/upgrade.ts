@@ -1,8 +1,8 @@
-import type { SubscriptionCreateResponse } from "../../../@types/billing.js";
+import type { SubscriptionCreateResponse } from "../../../@types/billing";
 import type { Session } from "@shopify/shopify-api";
 import type { Request, Response } from "express";
-import shops from "../../prisma/database/shops.js";
-import shopify from "../../shopify.js";
+import shops from "../../prisma/database/shops";
+import shopify from "../../shopify";
 
 const subscriptionPlan = {
   name: "$9.99 Plan",

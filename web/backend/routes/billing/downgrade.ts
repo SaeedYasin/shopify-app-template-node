@@ -1,10 +1,10 @@
-import type { SubscriptionCancelResponse } from "../../../@types/billing.js";
+import type { SubscriptionCancelResponse } from "../../../@types/billing";
 import type { Request, Response } from "express";
 import type { Session } from "@shopify/shopify-api";
 import { composeGid } from "@shopify/admin-graphql-api-utilities";
-import mixpanel from "../../lib/mixpanel.js";
-import shops from "../../prisma/database/shops.js";
-import shopify from "../../shopify.js";
+import mixpanel from "../../lib/mixpanel";
+import shops from "../../prisma/database/shops";
+import shopify from "../../shopify";
 
 export const APP_SUBSCRIPTION_CANCEL = `mutation appSubscriptionCancel(
     $id: ID!

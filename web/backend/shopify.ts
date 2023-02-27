@@ -1,7 +1,7 @@
 import { LATEST_API_VERSION, LogSeverity } from "@shopify/shopify-api";
 // import { BillingInterval } from "@shopify/shopify-api";
 import { shopifyApp } from "@shopify/shopify-app-express";
-import sessions from "./prisma/database/sessions.js";
+import sessions from "./prisma/database/sessions";
 const { restResources } = await import(
   `@shopify/shopify-api/rest/admin/${LATEST_API_VERSION}`
 );

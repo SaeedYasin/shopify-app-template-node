@@ -1,10 +1,10 @@
-import type { SubscriptionConfirmResponse } from "../../../@types/billing.js";
+import type { SubscriptionConfirmResponse } from "../../../@types/billing";
 import type { Plan } from "@prisma/client";
 import type { Request } from "express";
-import mixpanel from "../../lib/mixpanel.js";
-import sessions from "../../prisma/database/sessions.js";
-import shops from "../../prisma/database/shops.js";
-import shopify from "../../shopify.js";
+import mixpanel from "../../lib/mixpanel";
+import sessions from "../../prisma/database/sessions";
+import shops from "../../prisma/database/shops";
+import shopify from "../../shopify";
 
 const GET_ACTIVE_SUBSCRIPTION = `{
 	appInstallation {

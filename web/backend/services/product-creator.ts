@@ -1,5 +1,5 @@
 import { type Session, GraphqlQueryError } from "@shopify/shopify-api";
-import shopify from "../shopify.js";
+import shopify from "../shopify";
 
 const ADJECTIVES = [
   "autumn",

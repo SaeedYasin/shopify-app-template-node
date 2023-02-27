@@ -1,9 +1,9 @@
 import type { Session, HttpResponseError } from "@shopify/shopify-api";
 import type { Express, Request, Response, NextFunction } from "express";
-import type { ShopDataResponse } from "../../@types/shop.js";
-import mixpanel from "../lib/mixpanel.js";
-import shops from "../prisma/database/shops.js";
-import shopify from "../shopify.js";
+import type { ShopDataResponse } from "../../@types/shop";
+import mixpanel from "../lib/mixpanel";
+import shops from "../prisma/database/shops";
+import shopify from "../shopify";
 
 const GET_SHOP_DATA = `{
   shop {

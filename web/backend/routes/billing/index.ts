@@ -1,9 +1,9 @@
 import express, { type Request, type Response } from "express";
 import type { Session } from "@shopify/shopify-api";
-import { upgrade } from "./upgrade.js";
-import { downgrade } from "./downgrade.js";
-import { confirm } from "./confirm.js";
-import { check } from "./check.js";
+import { upgrade } from "./upgrade";
+import { downgrade } from "./downgrade";
+import { confirm } from "./confirm";
+import { check } from "./check";
 
 const billingRoutes = express.Router();
 

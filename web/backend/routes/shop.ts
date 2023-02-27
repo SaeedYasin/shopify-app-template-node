@@ -1,7 +1,7 @@
-import type { ShopDataResponse } from "../../@types/shop.js";
+import type { ShopDataResponse } from "../../@types/shop";
 import type { Session } from "@shopify/shopify-api";
-import shops from "../prisma/database/shops.js";
-import shopify from "../shopify.js";
+import shops from "../prisma/database/shops";
+import shopify from "../shopify";
 import express from "express";
 
 const shopRoutes = express.Router();

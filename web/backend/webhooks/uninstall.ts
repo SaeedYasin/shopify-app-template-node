@@ -1,7 +1,7 @@
 import { DeliveryMethod } from "@shopify/shopify-api";
-import mixpanel from "../lib/mixpanel.js";
-import shops from "../prisma/database/shops.js";
-import shopify from "../shopify.js";
+import mixpanel from "../lib/mixpanel";
+import shops from "../prisma/database/shops";
+import shopify from "../shopify";
 
 function getDifferenceInDaysFromCurrentDate(date1Str: Date) {
   const date1 = new Date(date1Str);

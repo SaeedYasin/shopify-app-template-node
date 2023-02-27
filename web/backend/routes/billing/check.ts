@@ -1,6 +1,6 @@
-import type { SubscriptionResponse } from "../../../@types/billing.js";
+import type { SubscriptionResponse } from "../../../@types/billing";
 import type { Session } from "@shopify/shopify-api";
-import shopify from "../../shopify.js";
+import shopify from "../../shopify";
 
 const GET_ACTIVE_SUBSCRIPTION = `
 {

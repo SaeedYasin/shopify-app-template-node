@@ -1,5 +1,5 @@
 import { Session } from "@shopify/shopify-api";
-import prisma, { tryCatch } from "./client.js";
+import prisma, { tryCatch } from "./client";
 
 export default {
   storeCallback,
