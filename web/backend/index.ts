@@ -49,6 +49,9 @@ app.post(
 );
 await addUninstallWebhookHandler();
 
+// If you are adding routes outside of the /api path, remember to
+// also add a proxy rule for them in web/frontend/vite.config.js
+
 // Unauthenticated routes
 app.use("/api/billing", billingUnauthenticatedRoutes);
 
