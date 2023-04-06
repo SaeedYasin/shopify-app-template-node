@@ -45,7 +45,7 @@ async function uninstall(shop: string) {
   mixpanel.track("App Uninstall", {
     shop,
     distinct_id: shop,
-    trialDaysLeft: trialDaysObj ? trialDaysObj.trialDays : "Unknonwn",
+    trialDaysLeft: trialDaysObj ? trialDaysObj.trialDays : "Unknown",
   });
 }
 
