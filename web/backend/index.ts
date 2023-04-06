@@ -79,6 +79,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/shop", shopRoutes);
 app.use("/api/billing", billingRoutes);
 
+app.use(shopify.cspHeaders());
 app.use(serveStatic(STATIC_PATH, { index: false }));
 
 // Reply to health check to let server know we are ready
