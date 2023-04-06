@@ -4,7 +4,7 @@ import { readFileSync } from "fs";
 import express from "express";
 import type { Request, Response, NextFunction } from "express";
 import type { Session } from "@shopify/shopify-api";
-import serveStatic from "serve-static";
+import expressServeStaticGzip from "express-static-gzip";
 import shopify from "./shopify";
 
 // Import Middleware
@@ -80,7 +80,13 @@ app.use("/api/shop", shopRoutes);
 app.use("/api/billing", billingRoutes);
 
 app.use(shopify.cspHeaders());
-app.use(serveStatic(STATIC_PATH, { index: false }));
+app.use(
+  expressServeStaticGzip(STATIC_PATH, {
+    enableBrotli: true,
+    index: false,
+    orderPreference: ["br", "gz"],
+  })
+);
 
 // Reply to health check to let server know we are ready
 app.use("/health", (_req, res) => {
