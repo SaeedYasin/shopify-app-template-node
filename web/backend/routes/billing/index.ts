@@ -54,7 +54,9 @@ billingUnauthenticatedRoutes.get(
     try {
       const { shop } = await confirm(req);
       res.redirect(
-        `https://${shop}/admin/apps/${process.env.APP_SLUG}/settings`
+        `https://admin.shopify.com/store/${shop.split(".")[0]}/apps/${
+          process.env.APP_SLUG
+        }/settings`
       );
     } catch (error) {
       console.log("Failed to process api request:", error);
