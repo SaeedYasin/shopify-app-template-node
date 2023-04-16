@@ -6,7 +6,7 @@ const { restResources } = await import(
   `@shopify/shopify-api/rest/admin/${LATEST_API_VERSION}`
 );
 // If you want IntelliSense for the rest resources, you should import them directly
-// import { restResources } from "@shopify/shopify-api/rest/admin/2022-10";
+// import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
 
 // The transactions with Shopify will always be marked as test transactions, unless NODE_ENV is production.
 // See the ensureBilling helper to learn more about billing in this template.
