@@ -7,6 +7,9 @@ import { DeliveryMethod } from "@shopify/shopify-api";
 // to the store owner directly. In some cases, a customer record contains only
 // the customer's email address."
 
+/**
+ * @type {{[key: string]: import("@shopify/shopify-api").WebhookHandler}}
+ */
 const GDPRWebhookHandlers: WebhookHandlersParam = {
   /**
    * Customers can request their data from a store owner. When this happens,
