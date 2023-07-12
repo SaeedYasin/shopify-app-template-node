@@ -2,6 +2,7 @@
   "editor.tabSize": 2,
   "editor.formatOnSave": true,
   "liquid.format.enable": true,
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true,
   "[liquid]": {
     "editor.defaultFormatter": "Shopify.theme-check-vscode",
     "editor.formatOnSave": true
