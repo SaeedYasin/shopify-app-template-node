@@ -1,21 +1,58 @@
-<span style="color: {{ block.settings.color }}">
-  App blocks let you build powerful integrations with online store themes.
-</span>
+{{ 'app.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'app.js' | asset_url }}" defer></script>
 
-{% render "app_snippet" %}
+<p style="color: {{ block.settings.color }}">App block test.</p>
+
+<script>
+  console.log('Hello World', window.Shopify.routes.root);
+</script>
+
+<p class="test">
+  {{ shop.domain }}
+</p>
+
+{% comment %} https://shopify.dev/docs/apps/custom-data/metafields/app-data {% endcomment %}
+<p class="test">Metafield: {{ app.metafields.namespace.key }}</p>
+
+<select name="country">
+  {{ all_country_option_tags }}
+</select>
+
+{% liquid
+  assign product_type = product.type | downcase
+  assign message = ''
+
+  case product_type
+    when 'health'
+      assign message = 'This is a health potion!'
+    when 'love'
+      assign message = 'This is a love potion!'
+    else
+      assign message = 'This is a potion!'
+  endcase
+
+  echo message
+
+  for item in cart.items
+    unless item.sku == empty
+      if item.sku == '1104' or item.sku == '1329'
+      endif
+    endunless
+  endfor
+%}
+
 {% schema %}
-  {
-    "name": "Hello World",
-    "target": "section",
-    "stylesheet": "app.css",
-    "javascript": "app.js",
-    "settings": [
-      {
-        "label": "Color",
-        "id": "color",
-        "type": "color",
-        "default": "#000000"
-      }
-    ]
-  }
+{
+  "name": "Hello World",
+  "templates": ["cart"],
+  "target": "section",
+  "settings": [
+    {
+      "label": "Color",
+      "id": "color",
+      "type": "color",
+      "default": "#000000"
+    }
+  ]
+}
 {% endschema %}

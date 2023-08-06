@@ -16,6 +16,7 @@ import GDPRWebhookHandlers from "./webhooks/gdpr";
 
 // Import Routes
 import productRoutes from "./routes/products";
+import blockRoutes from "./routes/blocks";
 import shopRoutes from "./routes/shop";
 import billingRoutes, {
   billingUnauthenticatedRoutes,
@@ -76,6 +77,7 @@ app.use("/api/*", (req: Request, res: Response, next: NextFunction) => {
 
 app.use(express.json());
 app.use("/api/products", productRoutes);
+app.use("/api/block", blockRoutes);
 app.use("/api/shop", shopRoutes);
 app.use("/api/billing", billingRoutes);
 
