@@ -13,11 +13,12 @@
     "deploy": "shopify app deploy"
   },
   "dependencies": {
-    "@shopify/app": "^3.47.5",
-    "@shopify/cli": "^3.47.5"
+    "@shopify/app": "^3.49.2",
+    "@shopify/cli": "^3.49.2"
   },
   "devDependencies": {
-    "@shopify/prettier-plugin-liquid": "^1.1.0",
+    "@shopify/prettier-plugin-liquid": "^1.2.3",
+    "@total-typescript/ts-reset": "^0.4.2",
     "prettier": "^2.8.8"
   }
 }

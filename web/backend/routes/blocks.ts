@@ -1,6 +1,16 @@
-import type { Session } from "@shopify/shopify-api";
-import shopify from "../shopify";
+import type { GraphqlQueryError, Session } from "@shopify/shopify-api";
+import type { GraphqlClient } from "@shopify/shopify-api/lib/clients/graphql/graphql_client";
 import express from "express";
+import type {
+  AppInstallationIdResponse,
+  AppMetafieldsResponse,
+} from "../../@types/app";
+import type {
+  BlockMetaField,
+  BlockMetaFieldSetResponse,
+  BlockPayload,
+} from "../../@types/block";
+import shopify from "../shopify.js";
 
 const blockRoutes = express.Router();
 
@@ -36,7 +46,7 @@ const APP_METAFIELDS = `query($namespace: String!) {
   }
 }`;
 
-function handleUserError(userErrors: any[]) {
+function handleUserError(userErrors: GraphqlQueryError[]) {
   if (userErrors && userErrors.length > 0) {
     const message = userErrors.map((error) => error.message).join(" ");
     throw new Error(message);
@@ -45,17 +55,16 @@ function handleUserError(userErrors: any[]) {
 
 export async function setMetaFields(
   ownerId: string,
-  metafields: any[],
-  graphqlClient: any
+  metafields: BlockMetaField[],
+  graphqlClient: GraphqlClient
 ) {
-  // @ts-ignore
-  const res = await graphqlClient.query<any>({
+  const res = await graphqlClient.query<BlockMetaFieldSetResponse>({
     data: {
       query: METAFIELDS_SET,
       variables: {
         metafields: metafields.map((metafield) => ({
           ...metafield,
-          ownerId: ownerId,
+          ownerId,
         })),
       },
     },
@@ -69,66 +78,67 @@ export async function setMetaFields(
   return setResult;
 }
 
-blockRoutes.get("/set-value", async (req, res) => {
-  let status = 200;
-  let error = null;
-  try {
-    const session: Session = res.locals.shopify.session;
-    const client = new shopify.api.clients.Graphql({ session });
-
-    // Get appInstallationId
-    const appInstallationId = await client.query({
+async function getAppInstallationId(client: GraphqlClient) {
+  const appInstallationIdResponse =
+    await client.query<AppInstallationIdResponse>({
       data: {
         query: APP_INSTALLATION_ID,
       },
     });
-    console.log(
-      "appInstallationId",
-      // @ts-ignore
-      appInstallationId.body.data.currentAppInstallation.id
-    );
+  return appInstallationIdResponse.body.data.currentAppInstallation.id;
+}
 
-    const value = {
-      title: "Customization title",
-      description: "Customization description",
-    };
+async function getAppMetafields(namespace: string, client: GraphqlClient) {
+  const metafieldsResponse = await client.query<AppMetafieldsResponse>({
+    data: {
+      query: APP_METAFIELDS,
+      variables: {
+        namespace,
+      },
+    },
+  });
+  return metafieldsResponse.body.data.currentAppInstallation.metafields.edges;
+}
 
-    // @ts-ignore
-    const ownerId = appInstallationId.body.data.currentAppInstallation.id;
-    console.log("ownerId", ownerId);
+blockRoutes.get("/:namespace/:key", async (req, res) => {
+  try {
+    const { namespace, key } = req.params;
+    const session: Session = res.locals.shopify.session;
+    const client = new shopify.api.clients.Graphql({ session });
+
+    const metafields = await getAppMetafields(namespace, client);
+    const metafield = metafields.find((mf) => mf.node.key === key)?.node;
+    res.status(200).send(metafield || {});
+  } catch (error) {
+    console.log(`Failed to process block GET: ${(error as Error)?.message}`);
+    res.status(500).send((error as Error)?.message);
+  }
+});
+
+blockRoutes.post("/", async (req, res) => {
+  try {
+    const payload: BlockPayload = req.body;
+    const session: Session = res.locals.shopify.session;
+    const client = new shopify.api.clients.Graphql({ session });
+
+    const appInstallationId = await getAppInstallationId(client);
     const setResult = await setMetaFields(
-      ownerId,
+      appInstallationId,
       [
         {
-          namespace: "namespace",
-          key: "key",
+          namespace: payload.namespace,
+          key: payload.key,
           type: "json",
-          value: JSON.stringify(value),
+          value: JSON.stringify(payload.mfValue),
         },
       ],
       client
     );
-    console.log("setResult", setResult);
-
-    const metafields = await client.query({
-      data: {
-        query: APP_METAFIELDS,
-        variables: {
-          namespace: "namespace",
-        },
-      },
-    });
-    console.log(
-      "metafields",
-      // @ts-ignore
-      metafields.body.data.currentAppInstallation.metafields.edges
-    );
-  } catch (e) {
-    console.log(`Failed to process blocks/set-value: ${(e as Error).message}`);
-    status = 500;
-    error = (e as Error).message;
+    res.status(200).send(setResult);
+  } catch (error) {
+    console.log(`Failed to process block POST: ${(error as Error)?.message}`);
+    res.status(500).send((error as Error)?.message);
   }
-  res.status(status).send({ success: status === 200, error });
 });
 
 export default blockRoutes;
