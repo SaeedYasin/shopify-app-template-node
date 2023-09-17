@@ -15,18 +15,15 @@ productRoutes.get("/count", async (_req, res) => {
   }
 });
 
-productRoutes.get("/create/:product_count", async (req, res) => {
+productRoutes.post("/create/:product_count", async (req, res) => {
   const { product_count } = req.params;
-  let status = 200;
-  let error = null;
   try {
     await productCreator(res.locals.shopify.session, +product_count);
+    res.status(200).send();
   } catch (e) {
     console.log(`Failed to process products/create: ${(e as Error).message}`);
-    status = 500;
-    error = (e as Error).message;
+    res.status(500).send((e as Error).message);
   }
-  res.status(status).send({ success: status === 200, error });
 });
 
 export default productRoutes;

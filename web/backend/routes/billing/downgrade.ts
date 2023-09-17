@@ -30,13 +30,13 @@ export const downgrade = async (req: Request, res: Response) => {
   // Retrieve shop data
   const shopData = await shops.getShop(shop);
   if (!shopData) {
-    throw `Shop ${shop} not found`;
+    throw new Error(`Shop ${shop} not found`);
   }
 
   // Store the active subscription charge id
   const chargeId = shopData.subscription?.chargeId;
   if (!chargeId) {
-    throw `No charge id on ${shop}`;
+    throw new Error(`No charge id on ${shop}`);
   }
 
   // Create client
@@ -55,13 +55,13 @@ export const downgrade = async (req: Request, res: Response) => {
   if (!response?.body?.data?.appSubscriptionCancel) {
     const error = response?.body?.data?.appSubscriptionCancel?.userErrors;
     console.error(error);
-    throw `Invalid payload returned for ${shop} on ${chargeId}`;
+    throw new Error(`Invalid payload returned for ${shop} on ${chargeId}`);
   }
 
   // Make sure the API call was successful
   const { status } = response.body.data.appSubscriptionCancel.appSubscription;
   if (status !== "CANCELLED") {
-    throw `Status of CANCELLED expected but received ${status}`;
+    throw new Error(`Status of CANCELLED expected but received ${status}`);
   }
 
   // Delete subscription
@@ -80,7 +80,9 @@ export const downgrade = async (req: Request, res: Response) => {
   });
 
   if (!dbResponse) {
-    throw `Could not update subscription in the database for ${shop}`;
+    throw new Error(
+      `Could not update subscription in the database for ${shop}`
+    );
   }
 
   mixpanel.track("Subscription deactivated", {

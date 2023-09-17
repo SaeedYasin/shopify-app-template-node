@@ -49,7 +49,7 @@ export const upgrade = async (req: Request, res: Response) => {
 
   const shopData = await shops.getShop(shop);
   if (!shopData) {
-    throw `Can't find shop of ${shop}`;
+    throw new Error(`Can't find shop of ${shop}`);
   }
 
   const client = new shopify.api.clients.Graphql({ session });
@@ -76,7 +76,7 @@ export const upgrade = async (req: Request, res: Response) => {
   if (!response?.body?.data?.appSubscriptionCreate?.confirmationUrl) {
     const error = response?.body?.data?.appSubscriptionCreate?.userErrors;
     console.error(error);
-    throw `Invalid payload returned for ${shop}`;
+    throw new Error(`Invalid payload returned for ${shop}`);
   }
 
   return response?.body.data.appSubscriptionCreate.confirmationUrl;

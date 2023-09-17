@@ -1,26 +1,26 @@
-// @ts-check
-import { join } from "path";
-import { readFileSync } from "fs";
-import express from "express";
-import type { Request, Response, NextFunction } from "express";
 import type { Session } from "@shopify/shopify-api";
+import type { NextFunction, Request, Response } from "express";
+import express from "express";
 import expressServeStaticGzip from "express-static-gzip";
+import { readFileSync } from "fs";
+import { join } from "path";
 import shopify from "./shopify";
 
 // Import Middleware
 import updateShopDataMiddleware from "./middleware/shopData";
 
 // Import Webhooks
-import addUninstallWebhookHandler from "./webhooks/uninstall";
 import GDPRWebhookHandlers from "./webhooks/gdpr";
+import addUninstallWebhookHandler from "./webhooks/uninstall";
 
 // Import Routes
-import productRoutes from "./routes/products";
-import blockRoutes from "./routes/blocks";
-import shopRoutes from "./routes/shop";
+import bugsnag from "./lib/bugsnag.js";
 import billingRoutes, {
   billingUnauthenticatedRoutes,
 } from "./routes/billing/index";
+import blockRoutes from "./routes/blocks";
+import productRoutes from "./routes/products";
+import shopRoutes from "./routes/shop";
 
 const PORT = parseInt(
   process.env.BACKEND_PORT || process.env.PORT || "8081",
@@ -33,6 +33,13 @@ const STATIC_PATH =
     : `${process.cwd()}/../frontend/`;
 
 const app = express();
+const bs_middleware = bugsnag.getPlugin("express");
+
+// This must be the first piece of middleware in the stack.
+// It can only capture errors in downstream middleware
+if (bs_middleware?.requestHandler) {
+  app.use(bs_middleware.requestHandler);
+}
 
 // Set up Shopify authentication
 app.get(shopify.config.auth.path, shopify.auth.begin());
@@ -101,6 +108,12 @@ app.use("/*", shopify.ensureInstalledOnShop(), async (_req, res) => {
     .set("Content-Type", "text/html")
     .send(readFileSync(join(STATIC_PATH, "index.html")));
 });
+
+// This handles any errors that Express catches. This needs to go before other
+// error handlers. BugSnag will call the `next` error handler if it exists.
+if (bs_middleware?.errorHandler) {
+  app.use(bs_middleware.errorHandler);
+}
 
 app.listen(PORT);
 console.log(`App running on port: ${PORT} ...`);

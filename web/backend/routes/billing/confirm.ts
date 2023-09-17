@@ -27,7 +27,8 @@ export const confirm = async (req: Request) => {
   const sessionId = shopify.api.session.getOfflineId(shop);
   const session = await sessions.loadCallback(sessionId);
 
-  if (!session) throw `Invalid session for ${shop} with sessionId ${sessionId}`;
+  if (!session)
+    throw new Error(`Invalid session for ${shop} with sessionId ${sessionId}`);
 
   const client = new shopify.api.clients.Graphql({ session });
 
@@ -40,14 +41,16 @@ export const confirm = async (req: Request) => {
     !response?.body?.data?.appInstallation?.activeSubscriptions ||
     !response?.body.data.appInstallation.activeSubscriptions.length
   ) {
-    throw `Invalid payload returned for ${shop} on ${charge_id}`;
+    throw new Error(`Invalid payload returned for ${shop} on ${charge_id}`);
   }
 
   // Get the active subscription
   const activeSubscription =
     response?.body?.data?.appInstallation?.activeSubscriptions[0];
   if (activeSubscription.status !== "ACTIVE") {
-    throw `${shop} subscription status is not active on charge_id ${charge_id}`;
+    throw new Error(
+      `${shop} subscription status is not active on charge_id ${charge_id}`
+    );
   }
 
   const plan: Plan = "PAID"; // TODO: add query parameter
