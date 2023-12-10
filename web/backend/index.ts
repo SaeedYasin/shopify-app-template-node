@@ -10,7 +10,7 @@ import shopify from "./shopify";
 import updateShopDataMiddleware from "./middleware/shopData";
 
 // Import Webhooks
-import GDPRWebhookHandlers from "./webhooks/gdpr";
+import PrivacyWebhookHandlers from "./webhooks/privacy";
 import addUninstallWebhookHandler from "./webhooks/uninstall";
 
 // Import Routes
@@ -53,7 +53,7 @@ app.get(
 // Set up Shopify webhooks handling
 app.post(
   shopify.config.webhooks.path,
-  shopify.processWebhooks({ webhookHandlers: GDPRWebhookHandlers })
+  shopify.processWebhooks({ webhookHandlers: PrivacyWebhookHandlers })
 );
 await addUninstallWebhookHandler();
 

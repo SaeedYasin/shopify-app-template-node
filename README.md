@@ -157,19 +157,19 @@ This template can be installed using your preferred package manager:
 Using yarn:
 
 ```shell
-yarn create @shopify/app
+yarn create @shopify/app --template=node
 ```
 
 Using npm:
 
 ```shell
-npm init @shopify/app@latest
+npm init @shopify/app@latest -- --template=node
 ```
 
 Using pnpm:
 
 ```shell
-pnpm create @shopify/app@latest
+pnpm create @shopify/app@latest --template=node
 ```
 
 This will clone the template and install the required dependencies.
@@ -215,7 +215,7 @@ The database that works best for you depends on the data your app needs and how 
 | Redis      | Key-value        | [Digital Ocean](https://www.digitalocean.com/try/managed-databases-redis), [Amazon MemoryDB](https://aws.amazon.com/memorydb/)                                                                                                        |
 | MongoDB    | NoSQL / Document | [Digital Ocean](https://www.digitalocean.com/try/managed-databases-mongodb), [MongoDB Atlas](https://www.mongodb.com/atlas/database)                                                                                                  |
 
-To use one of these, you need to change your session storage configuration. To help, here’s a list of [SessionStorage adapter packages](https://github.com/Shopify/shopify-api-js/tree/main/docs/guides/session-storage.md).
+To use one of these, you need to change your session storage configuration. To help, here’s a list of [SessionStorage adapter packages](https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/guides/session-storage.md).
 
 ### Build
 
